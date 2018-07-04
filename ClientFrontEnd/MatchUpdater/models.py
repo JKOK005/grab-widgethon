@@ -13,3 +13,8 @@ class LatestMatchesData(models.Model):
 
 	def __str__(self):
 		return str(self.league_id) + "-" + self.home_name + "-vs-" + self.away_name
+
+class LatestMatchesDataStaging(LatestMatchesData):
+	def __str__(self):
+		return str(self.league_id) + "-" + self.home_name + "-vs-" + self.away_name + "-staging"
+	
