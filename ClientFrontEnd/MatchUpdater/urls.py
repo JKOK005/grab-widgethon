@@ -19,5 +19,5 @@ from django.conf.urls import url, include
 from MatchUpdater.views import *
 
 urlpatterns = [
-    url(r'^getLatestMatches/(?P<count_limits>[0-9]{2})/$', GetMatchesView.as_view()),
+    url(r'^getLatestMatches/$', GetMatchesView.as_view()),
 ]
