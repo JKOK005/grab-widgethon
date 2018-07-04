@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import url, include
+from MatchUpdater.views import *
 
 urlpatterns = [
-    url(r'^updateMatchTable/', include('MatchUpdater.urls')),
-    # url(r'^updateLeaderBoard/', include('TableUpdater.urls'))
+    url(r'^getLatestMatches/(?P<count_limits>[0-9]{2})/$', GetMatchesView.as_view()),
 ]
