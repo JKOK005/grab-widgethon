@@ -19,5 +19,6 @@ from django.conf.urls import url, include
 from MatchUpdater.views import *
 
 urlpatterns = [
+	url(r'^cleanUpTable/$', GetMatchesView.as_view()),
     url(r'^getLatestMatches/$', GetMatchesView.as_view()),
 ]

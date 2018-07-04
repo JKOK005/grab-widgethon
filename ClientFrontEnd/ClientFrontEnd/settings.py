@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MatchUpdater.apps.MatchupdaterConfig',
-    'TableUpdater.apps.TableupdaterConfig'
+    'TableUpdater.apps.TableupdaterConfig',
+    'Archive.apps.ArchiveConfig'
 ]
 
 MIDDLEWARE = [
