@@ -16,11 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import url, include
-from django.contrib import admin
+from MainAPI.views import *
+
 
 urlpatterns = [
-    url(r'^updateMatchTable/', include('MatchUpdater.urls')),
-	url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('MainAPI.urls')),
-    # url(r'^updateLeaderBoard/', include('TableUpdater.urls'))
+    url(r'^listMatches/$', ListMatchesView.as_view()),
+    #url(r'^updatePrediction/(?P<count_limits>[0-9]{2})/$', UpdatePrediction.as_view()),
+    url(r'^getLeaderboard/(?P<user_id>[0-9]{2})/$', GetLeaderboardView.as_view()),
 ]
