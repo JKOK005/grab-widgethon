@@ -22,17 +22,21 @@ class GetLeaderboardView(View):
 
 class ListMatchesView(APIView):
 	def get(self, request, format=None):
+		league_names = {
+		130 : "Singapore League", 
+		297: "Indonesia League",
+		802: "World Cup"
+		}
+
 		matches = LatestMatchesData.objects.all()
 		latest_matches = {}
 
 		for m in matches:	
-			match_days = {}
 			match_date = m.kick_off_time.strftime("%Y-%m-%d")
 
 			if m.league_id in latest_matches.keys():
-				print("here")
 				if match_date in latest_matches.get(m.league_id).keys():
-					match_days[m.league_id][match_date].append(m)
+					latest_matches[m.league_id][match_date].append(m)
 				else:
 					latest_matches[m.league_id][match_date] = []
 					latest_matches[m.league_id][match_date].append(m)
@@ -45,13 +49,13 @@ class ListMatchesView(APIView):
 
 
 
-
 		response = []
 
 		for lk, lv in latest_matches.items():
 			league = {}
 
 			league["league_id"] = lk
+			league["league_name"] = league_names.get(lk, "")
 			league["league_img_url"] = ""
 
 			match_days = []
@@ -63,7 +67,7 @@ class ListMatchesView(APIView):
 				matches = []
 				for m in dv: 
 					res = {}
-					res["league_id"] = m.league_id
+					res["match_id"] = m.match_id
 					res["home_name"] = m.home_name
 					res["away_name"] = m.away_name
 					res["kickoff_time"] = m.kick_off_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -153,7 +157,7 @@ class GetLeaderboardView(APIView):
 		response["leagues"] = leagues
 
 
-		r = Response(r)
+		r = Response(response)
 		r["Access-Control-Allow-Origin"] = "*"
 
 
