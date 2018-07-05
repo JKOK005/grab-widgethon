@@ -64,7 +64,7 @@ class RefreshMatchesView(View):
 		super(RefreshMatchesView, self).__init__(*args, **kwargs)
 
 	def constructMatchObject(self, match_json):
-		league_id = match_json['id']
+		league_id = match_json['league_id']
 		match_id = match_json['id']
 		home_name = match_json['home_name']
 		away_name = match_json['away_name']
