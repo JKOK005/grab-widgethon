@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from MatchUpdater.models import *
-import json
+from rest_framework.views import APIView, Response
+import json, random
 
 # Create your views here.
 class GetLeaderboardView(View):
@@ -19,11 +20,8 @@ class GetLeaderboardView(View):
 		return HttpResponse("Success in get matches view:")
 
 
-class ListMatchesView(View):
-	def __init__(self, *args, **kwargs):
-		super(ListMatchesView, self).__init__(*args, **kwargs)
-
-	def get(self, request, *args, **kwargs):
+class ListMatchesView(APIView):
+	def get(self, request, format=None):
 		matches = LatestMatchesData.objects.all()
 		leagues = {}
 
@@ -46,8 +44,6 @@ class ListMatchesView(View):
 				leagues[m.league_id][match_date].append(m)
 
 		response = []
-
-		print(leagues)
 
 		for lk, lv in leagues.items():
 			league = {}
@@ -81,7 +77,7 @@ class ListMatchesView(View):
 
 			response.append(league)
 
-		return HttpResponse(json.dumps(response))
+		return Response(response)
 '''
 		for key, value in leagues.items():
 			response.match_days[l]
@@ -90,19 +86,59 @@ class ListMatchesView(View):
 		
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class UpdatePredictionView(View):
-	def __init__(self, *args, **kwargs):
-		super(UpdatePredictionView, self).__init__(*args, **kwargs)
-
-	@csrf_exempt
-	def post(self, request, *args, **kwargs):
-		resp_json = json.loads(request.body)
-		match_counts = resp_json['request']
-
+class UpdatePredictionView(APIView):
+	def post(self, request, format=None):
+		req = json.loads(request.body)
+		print(req)
 		#insert to database
 
-		return HttpResponse("Success in get matches view: {0}")
+
+		return Response({"success": "true"})
 
 
 		
+
+class GetLeaderboardView(APIView):
+	def get(self, request, *args, **kwargs):
+		response = {}
+		response["user_id"] = kwargs["user_id"]
+		
+		leagues = []
+		for l in [130, 297] :
+			league = {}
+			league["league_id"] = l
+
+			ranks = {}
+
+			dummy_score = random.randint(3500, 3699)
+
+			for r in range(1, 9):
+				rank = {}
+				rank["user_id"] = random.randint(100000, 2000000)
+				rank["name"] = "John Doe"
+
+				if (r == 6):
+					dummy_score = random.randint(600, 800)
+					dummy_rank = random.randint(90, 110)
+
+				if (r < 6) :
+					rank_number = str(r) 
+					score = dummy_score
+					dummy_score = random.randint(2500, dummy_score)
+				else :
+					rank_number = str(dummy_rank - r)
+					score = dummy_score
+					dummy_score = random.randint(400, dummy_score)
+
+				rank["score"] = score
+				
+				ranks[rank_number] = rank
+			
+			league["ranks"] = ranks
+
+			leagues.append(league)
+
+
+		response["leagues"] = leagues
+
+		return Response(response)

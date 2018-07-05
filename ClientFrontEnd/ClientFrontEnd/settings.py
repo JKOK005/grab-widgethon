@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'MatchUpdater.apps.MatchupdaterConfig',
     'TableUpdater.apps.TableupdaterConfig',
-    'Archive.apps.ArchiveConfig'
+    'Archive.apps.ArchiveConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
