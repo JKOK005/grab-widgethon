@@ -32,7 +32,7 @@ class ListMatchesView(APIView):
 			if m.league_id in latest_matches.keys():
 				print("here")
 				if match_date in latest_matches.get(m.league_id).keys():
-					match_days[league_id][match_date].append(m)
+					match_days[m.league_id][match_date].append(m)
 				else:
 					latest_matches[m.league_id][match_date] = []
 					latest_matches[m.league_id][match_date].append(m)
