@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import url, include
+from rest_framework import routers
 from MainAPI.views import *
 
 
 urlpatterns = [
     url(r'^listMatches/$', ListMatchesView.as_view()),
-    #url(r'^updatePrediction/(?P<count_limits>[0-9]{2})/$', UpdatePrediction.as_view()),
-    url(r'^getLeaderboard/(?P<user_id>[0-9]{2})/$', GetLeaderboardView.as_view()),
+    url(r'^updatePrediction/$', UpdatePredictionView.as_view()),
+    url(r'^getLeaderboard/(?P<user_id>.+)/$', GetLeaderboardView.as_view()),
 ]
