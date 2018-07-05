@@ -7,16 +7,23 @@ from django.db import models
 class LatestMatchesData(models.Model):
 	league_id = models.IntegerField(null=False)
 	match_id = models.IntegerField(default=-1)
-	home_name = models.CharField(max_length=20, blank=False)
-	away_name = models.CharField(max_length=20, blank=False)
+	home_name = models.CharField(max_length=20, default=None)
+	away_name = models.CharField(max_length=20, default=None)
 	kick_off_time = models.DateTimeField(auto_now=False)
 	created_at = models.DateTimeField(auto_now=True)
 
-	def __str__(self):
+	def __unicode__(self):
 		return str(self.league_id) + "-" + self.home_name + "-vs-" + self.away_name
 
-class LatestMatchesDataStaging(LatestMatchesData):
-	def __str__(self):
+class LatestMatchesDataStaging(models.Model):
+	league_id = models.IntegerField(null=False)
+	match_id = models.IntegerField(default=-1)
+	home_name = models.CharField(max_length=20, default=None)
+	away_name = models.CharField(max_length=20, default=None)
+	kick_off_time = models.DateTimeField(auto_now=False)
+	created_at = models.DateTimeField(auto_now=True)
+
+	def __unicode__(self):
 		return str(self.league_id) + "-" + self.home_name + "-vs-" + self.away_name + "-staging"
 	
 class Prediction(models.Model):
@@ -25,5 +32,5 @@ class Prediction(models.Model):
 	home_score = models.IntegerField()
 	away_score = models.IntegerField()
 
-	def __str__(self):
+	def __unicode__(self):
 		return str(self.user_id) + "-" + self.match_id + " : " + self.home_score + "-" + self.away_score

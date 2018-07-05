@@ -20,7 +20,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^updateMatchTable/', include('MatchUpdater.urls')),
-	url(r'^admin/', admin.site.urls),
     url(r'^api/', include('MainAPI.urls')),
+    url(r'^admin/', admin.site.urls)
     # url(r'^updateLeaderBoard/', include('TableUpdater.urls'))
 ]

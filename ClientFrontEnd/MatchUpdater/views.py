@@ -33,7 +33,7 @@ class CleanMatchesView(View):
 		cut_off_time_tz = cut_off_time.replace(tzinfo=pytz.UTC)
 		matches_not_started = LatestMatchesData.objects.all().filter(kick_off_time__gte=cut_off_time_tz)
 		matches_started = LatestMatchesData.objects.all().exclude(kick_off_time__gte=cut_off_time_tz)
-		print("Matches started: {0}, Matches remaining: {2}".format(len(matches_started), len(matches_not_started)))
+		print("Matches started: {0}, Matches remaining: {1}".format(len(matches_started), len(matches_not_started)))
 		matches_started_count = len(matches_started)
 		try:
 			for each_matches_started in matches_started:
@@ -52,7 +52,7 @@ class CleanMatchesView(View):
 	@csrf_exempt
 	def post(self, request, *args, **kwargs):
 		resp_json = json.loads(request.body)
-		buffer_time_in_seconds = resp_json['buffer']
+		buffer_time_in_seconds = int(resp_json['buffer'])
 		present_time = datetime.now()
 		cut_off_time = present_time - timedelta(seconds=buffer_time_in_seconds) 
 		matches_to_staging = self.moveStartedMatchesToStaging(cut_off_time)
@@ -78,7 +78,7 @@ class RefreshMatchesView(View):
 
 	def updateMatchTable(self, matches, max_allowable_matches):
 		current_matchs = LatestMatchesData.objects.count()
-		new_matches_to_add = max(0, max_allowable_matches - current_matchs)
+		new_matches_to_add = max(-1, max_allowable_matches - current_matchs)
 		match_added_counter = 0
 		for match_candidate in matches:
 			if(match_added_counter > new_matches_to_add):
@@ -91,7 +91,8 @@ class RefreshMatchesView(View):
 				print("Added match_id: {0}".format(match_obj.match_id))
 			else:
 				print("Match_id: {0} already exists".format(match_obj.match_id))
-		return print("Updated a total of {0} new matches".format(match_added_counter))
+		print("Updated a total of {0} new matches".format(match_added_counter))
+		return
 
 	def post(self, request, *args, **kwargs):
 		resp_json = json.loads(request.body)
