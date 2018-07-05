@@ -64,7 +64,8 @@ class ListMatchesView(APIView):
 
 		response = []
 
-		for lk, lv in latest_matches.items():
+		for lk in [297, 802] :
+			lv = latest_matches[lk]
 			league = {}
 
 			league["league_id"] = lk
@@ -135,7 +136,7 @@ class GetLeaderboardView(APIView):
 		response["user_id"] = kwargs["user_id"]
 		
 		leagues = []
-		for l in [130, 297] :
+		for l in [297, 802] :
 			league = {}
 			league["league_id"] = l
 
