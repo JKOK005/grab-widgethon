@@ -23,9 +23,22 @@ class GetLeaderboardView(View):
 class ListMatchesView(APIView):
 	def get(self, request, format=None):
 		league_names = {
-		130 : "Singapore League", 
-		297: "Indonesia League",
-		802: "World Cup"
+			130 : "Singapore League", 
+			297: "Indonesian Super League",
+			802: "World Cup"
+		}
+
+		league_logo_img_url = {
+			130 : "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/logo-singapore.png", 
+			297: "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/logo-indonesia.png",
+			802: "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/logo-fifa_world_cup.png"
+		}
+
+
+		league_carousel_img_url = {
+			130 : "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/carousel-malaysia.png", 
+			297: "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/carousel-indonesia.png",
+			802: "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/carousel-worldcup.jpg"
 		}
 
 		matches = LatestMatchesData.objects.all()
@@ -56,7 +69,8 @@ class ListMatchesView(APIView):
 
 			league["league_id"] = lk
 			league["league_name"] = league_names.get(lk, "")
-			league["league_img_url"] = ""
+			league["league_carousel_img_url"] = league_carousel_img_url.get(lk, "")
+			league["league_logo_img_url"] = league_logo_img_url.get(lk, "")
 
 			match_days = []
 
@@ -69,7 +83,9 @@ class ListMatchesView(APIView):
 					res = {}
 					res["match_id"] = m.match_id
 					res["home_name"] = m.home_name
+					res["home_img_url"] = "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/" + m.home_name.replace(" ", "").replace("&","").lower()
 					res["away_name"] = m.away_name
+					res["away_img_url"] = "https://s3-ap-southeast-1.amazonaws.com/irfan-widgethon/" + m.away_name.replace(" ", "").replace("&","").lower()
 					res["kickoff_time"] = m.kick_off_time.strftime("%Y-%m-%d %H:%M:%S")
 					#res["id"] = m.match_id
 					res["id"] = 1
