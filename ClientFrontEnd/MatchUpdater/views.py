@@ -91,7 +91,7 @@ class RefreshMatchesView(View):
 				print("Added match_id: {0}".format(match_obj.match_id))
 			else:
 				print("Match_id: {0} already exists".format(match_obj.match_id))
-		return HttpResponse("Updated a total of {0} new matches".format(match_added_counter), status=200)
+		return print("Updated a total of {0} new matches".format(match_added_counter))
 
 	def post(self, request, *args, **kwargs):
 		resp_json = json.loads(request.body)
