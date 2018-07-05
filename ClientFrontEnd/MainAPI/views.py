@@ -23,29 +23,32 @@ class GetLeaderboardView(View):
 class ListMatchesView(APIView):
 	def get(self, request, format=None):
 		matches = LatestMatchesData.objects.all()
-		leagues = {}
+		latest_matches = {}
 
 		for m in matches:	
 			match_days = {}
 			match_date = m.kick_off_time.strftime("%Y-%m-%d")
 
-			if m.league_id in leagues.keys():
+			if m.league_id in latest_matches.keys():
 				print("here")
-				if match_date in leagues.get(m.league_id).keys():
+				if match_date in latest_matches.get(m.league_id).keys():
 					match_days[league_id][match_date].append(m)
 				else:
-					leagues[m.league_id][match_date] = []
-					leagues[m.league_id][match_date].append(m)
+					latest_matches[m.league_id][match_date] = []
+					latest_matches[m.league_id][match_date].append(m)
 			else:
 				res = {}
 
-				leagues[m.league_id] = {}
-				leagues[m.league_id][match_date] = []
-				leagues[m.league_id][match_date].append(m)
+				latest_matches[m.league_id] = {}
+				latest_matches[m.league_id][match_date] = []
+				latest_matches[m.league_id][match_date].append(m)
+
+
+
 
 		response = []
 
-		for lk, lv in leagues.items():
+		for lk, lv in latest_matches.items():
 			league = {}
 
 			league["league_id"] = lk
@@ -77,7 +80,11 @@ class ListMatchesView(APIView):
 
 			response.append(league)
 
-		return Response(response)
+		r = Response(response)
+
+		r["Access-Control-Allow-Origin"] = "*"
+
+		return r 
 '''
 		for key, value in leagues.items():
 			response.match_days[l]
@@ -93,7 +100,11 @@ class UpdatePredictionView(APIView):
 		#insert to database
 
 
-		return Response({"success": "true"})
+		r = Response({"success": "true"})
+
+		r["Access-Control-Allow-Origin"] = "*"
+
+		return r
 
 
 		
@@ -141,4 +152,9 @@ class GetLeaderboardView(APIView):
 
 		response["leagues"] = leagues
 
-		return Response(response)
+
+		r = Response(r)
+		r["Access-Control-Allow-Origin"] = "*"
+
+
+		return r

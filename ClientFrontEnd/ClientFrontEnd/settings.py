@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'MatchUpdater.apps.MatchupdaterConfig',
     'TableUpdater.apps.TableupdaterConfig',
     'Archive.apps.ArchiveConfig',
+    'corsheaders',
     'rest_framework'
 ]
 
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+    #'ClientFrontEnd.middleware.corsMiddleware'
 ]
 
 ROOT_URLCONF = 'ClientFrontEnd.urls'
