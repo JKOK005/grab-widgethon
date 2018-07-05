@@ -63,3 +63,40 @@ class RefreshMatchesView(View):
 	def __init__(self, *args, **kwargs):
 		super(RefreshMatchesView, self).__init__(*args, **kwargs)
 
+	def constructMatchObject(self, match_json):
+		league_id = match_json['id']
+		match_id = match_json['id']
+		home_name = match_json['home_name']
+		away_name = match_json['away_name']
+		kick_off_time = datetime.strptime(match_json['date'] + " " + match_json['time'], "%Y-%m-%d %H:%M:%S")
+		created_at = datetime.now().replace(tzinfo=pytz.UTC)
+		return LatestMatchesData(league_id=league_id, match_id=match_id, home_name=home_name,
+								 away_name=away_name, kick_off_time=kick_off_time, created_at=created_at)
+
+	def checkMatchExists(self, match_obj):
+		return LatestMatchesData.objects.filter(match_id__exact = match_obj.match_id).count() > 0 	# If match_id is present, return 1 > 0 -> True
+
+	def updateMatchTable(self, matches, max_allowable_matches):
+		current_matchs = LatestMatchesData.objects.count()
+		new_matches_to_add = max(0, max_allowable_matches - current_matchs)
+		match_added_counter = 0
+		for match_candidate in matches:
+			if(match_added_counter > new_matches_to_add):
+				break
+
+			match_obj = self.constructMatchObject(match_candidate)			
+			if not self.checkMatchExists(match_obj):
+				match_obj.save()
+				match_added_counter += 1
+				print("Added match_id: {0}".format(match_obj.match_id))
+			else:
+				print("Match_id: {0} already exists".format(match_obj.match_id))
+		return HttpResponse("Updated a total of {0} new matches".format(match_added_counter), status=200)
+
+	def post(self, request, *args, **kwargs):
+		resp_json = json.loads(request.body)
+		max_allowable_matches = int(resp_json['max_matches'])
+		live_fixtures = PredictorApi.getLiveFixtures()
+		self.updateMatchTable(live_fixtures, max_allowable_matches)
+		return HttpResponse("Refreshed matches", status=200)
+

@@ -3,7 +3,6 @@ import os
 import json
 
 class PredictorApi(object):
-
 	@staticmethod
 	def getLiveFixtures():
 		key = os.getenv('LIVE_SCORE_KEY')

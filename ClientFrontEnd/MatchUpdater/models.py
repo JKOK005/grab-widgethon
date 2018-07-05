@@ -5,8 +5,8 @@ from django.db import models
 
 # Create your models here.
 class LatestMatchesData(models.Model):
-	league_id = models.IntegerField()
-	#match_id = models.IntegerField()
+	league_id = models.IntegerField(null=False)
+	match_id = models.IntegerField(default=-1)
 	home_name = models.CharField(max_length=20, blank=False)
 	away_name = models.CharField(max_length=20, blank=False)
 	kick_off_time = models.DateTimeField(auto_now=False)
